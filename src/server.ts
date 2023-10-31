@@ -6,13 +6,13 @@ const app = fastify();
 
 const prisma = new PrismaClient();
 
-app.get("/pacients", async () => {
-  const pacients = await prisma.pacient.findMany();
+app.get("/patients", async () => {
+  const patients = await prisma.patient.findMany();
 
-  return { pacients };
+  return { patients };
 });
 
-app.post("/pacients", async (request, reply) => {
+app.post("/patients", async (request, reply) => {
   const createUserSchema = z.object({
     name: z.string(),
     email: z.string().email(),
@@ -20,7 +20,7 @@ app.post("/pacients", async (request, reply) => {
 
   const { name, email } = createUserSchema.parse(request.body);
 
-  await prisma.pacient.create({
+  await prisma.patient.create({
     data: {
       name,
       email,
