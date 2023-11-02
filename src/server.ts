@@ -1,40 +1,23 @@
 import fastify from "fastify";
-import { PrismaClient } from "@prisma/client";
-import { z } from "zod";
 
-const app = fastify();
+import patientRoute from "./modules/patient/patient.route";
 
-const prisma = new PrismaClient();
+const fastity = fastify();
 
-app.get("/patients", async () => {
-  const patients = await prisma.patient.findMany();
-
-  return { patients };
+fastity.register(patientRoute, {
+  prefix: "/api/patients",
 });
 
-app.post("/patients", async (request, reply) => {
-  const createUserSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-  });
-
-  const { name, email } = createUserSchema.parse(request.body);
-
-  await prisma.patient.create({
-    data: {
-      name,
-      email,
-    },
-  });
-
-  return reply.status(201).send();
-});
-
-app
-  .listen({
-    host: "0.0.0.0",
-    port: process.env.PORT ? Number(process.env.PORT) : 5000,
-  })
-  .then(() => {
+const main = async () => {
+  try {
+    fastity.listen({
+      host: "0.0.0.0",
+      port: process.env.PORT ? Number(process.env.PORT) : 5000,
+    });
     console.log("Server running...");
-  });
+  } catch (err) {
+    fastity.log.error(err);
+  }
+};
+
+main();
