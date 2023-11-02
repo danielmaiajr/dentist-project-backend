@@ -1,13 +1,64 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../utils/prisma";
+import { ICreatePatient, IParams } from "./patient.schema";
 
-const patientController = async (
+export async function createPatientHandler(
+  request: FastifyRequest<{ Querystring: ICreatePatient }>,
+  reply: FastifyReply
+) {
+  const { name, email } = request.query;
+
+  const patient = await prisma.patient.create({
+    data: {
+      name,
+      email,
+    },
+  });
+
+  reply.send(patient);
+}
+
+export async function getAllPatientsHandler(
   request: FastifyRequest,
   reply: FastifyReply
-) => {
-  const test = await prisma.patient.findMany();
+) {
+  const patient = await prisma.patient.findMany();
 
-  reply.send({ test });
-};
+  reply.send(patient);
+}
 
-export default patientController;
+export async function getPatientByIdHandler(
+  request: FastifyRequest<{ Params: IParams }>,
+  reply: FastifyReply
+) {
+  const { patientId } = request.params;
+  const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+  reply.send(patient);
+}
+
+export async function updatePatientByIdHandler(
+  request: FastifyRequest<{ Params: IParams }>,
+  reply: FastifyReply
+) {
+  const { patientId } = request.params;
+
+  const patient = await prisma.patient.update({
+    where: { id: patientId },
+    data: { name: "Daniel" },
+  });
+
+  reply.send(patient);
+}
+
+export async function deletePatientByIdHandler(
+  request: FastifyRequest<{ Params: IParams }>,
+  reply: FastifyReply
+) {
+  const { patientId } = request.params;
+
+  const patient = await prisma.patient.delete({
+    where: { id: patientId },
+  });
+
+  reply.send(patient);
+}
