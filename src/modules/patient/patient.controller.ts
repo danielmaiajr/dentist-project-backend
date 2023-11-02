@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../utils/prisma";
-import { ICreatePatient, IParams } from "./patient.schema";
+import { ICreatePatient, IParams, IUpdatePatient } from "./patient.schema";
 
 export async function createPatientHandler(
   request: FastifyRequest<{ Querystring: ICreatePatient }>,
@@ -37,14 +37,20 @@ export async function getPatientByIdHandler(
 }
 
 export async function updatePatientByIdHandler(
-  request: FastifyRequest<{ Params: IParams }>,
+  request: FastifyRequest<{ Params: IParams; Querystring: IUpdatePatient }>,
   reply: FastifyReply
 ) {
   const { patientId } = request.params;
+  const { name, email } = request.query;
+
+  const data = {
+    ...(name && { name }),
+    ...(email && { email }),
+  };
 
   const patient = await prisma.patient.update({
     where: { id: patientId },
-    data: { name: "Daniel" },
+    data,
   });
 
   reply.send(patient);
