@@ -1,12 +1,8 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
-import prisma from "../../utils/prisma";
+import patientController from "./patient.controller";
 
 async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
-  fastify.get("/", async (request, reply) => {
-    const test = await prisma.patient.findMany();
-
-    reply.send({ test });
-  });
+  fastify.get("/", patientController);
 }
 
 export default routes;
