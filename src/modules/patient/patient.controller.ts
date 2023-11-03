@@ -32,7 +32,9 @@ export async function getPatientByIdHandler(
   reply: FastifyReply
 ) {
   const { patientId } = request.params;
-  const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+  const patient = await prisma.patient.findUnique({
+    where: { id: Number(patientId) },
+  });
   reply.send(patient);
 }
 
@@ -49,7 +51,7 @@ export async function updatePatientByIdHandler(
   };
 
   const patient = await prisma.patient.update({
-    where: { id: patientId },
+    where: { id: Number(patientId) },
     data,
   });
 
@@ -63,7 +65,7 @@ export async function deletePatientByIdHandler(
   const { patientId } = request.params;
 
   const patient = await prisma.patient.delete({
-    where: { id: patientId },
+    where: { id: Number(patientId) },
   });
 
   reply.send(patient);
