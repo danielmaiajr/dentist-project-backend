@@ -1,5 +1,5 @@
 export interface IParams {
-  patientId: string;
+  patientId: number;
 }
 
 export interface ICreatePatient {
