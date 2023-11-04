@@ -2,11 +2,13 @@ import fastify from "fastify";
 
 import patientRoute from "./modules/patient/patient.route";
 import dentistRoute from "./modules/dentist/dentist.route";
+import userRoute from "./modules/user/user.route";
 
 const fastity = fastify();
 
 fastity.register(patientRoute, { prefix: "/api/patients" });
 fastity.register(dentistRoute, { prefix: "/api/dentists" });
+fastity.register(userRoute, { prefix: "/api/users" });
 
 const main = async () => {
   try {
