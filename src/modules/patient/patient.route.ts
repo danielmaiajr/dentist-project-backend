@@ -7,17 +7,39 @@ import {
   updatePatientByIdHandler,
 } from "./patient.controller";
 
-import { ICreatePatient, IParams, IUpdatePatient } from "./patient.schema";
+import {
+  CreatePatientRequestBodyType,
+  GetPatientByIdRequestParamsType,
+  PutPatientByIdRequestBodyType,
+} from "./patient.schema";
 
 async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
-  fastify.post<{ Querystring: ICreatePatient }>("/", createPatientHandler);
-  fastify.get("/", getAllPatientsHandler);
-  fastify.get<{ Params: IParams }>("/:patientId", getPatientByIdHandler);
-  fastify.put<{ Params: IParams; Querystring: IUpdatePatient }>(
-    "/:patientId",
-    updatePatientByIdHandler
+  // POST /api/patients
+  fastify.post<{ Body: CreatePatientRequestBodyType }>(
+    "/",
+    createPatientHandler
   );
-  fastify.delete<{ Params: IParams }>("/:patientId", deletePatientByIdHandler);
+
+  // GET /api/patients
+  fastify.get("/", getAllPatientsHandler);
+
+  // GET /api/patients/:patientId
+  fastify.get<{ Params: GetPatientByIdRequestParamsType }>(
+    "/:patientId",
+    getPatientByIdHandler
+  );
+
+  // PUT /api/patients/:patientId
+  fastify.put<{
+    Params: GetPatientByIdRequestParamsType;
+    Body: PutPatientByIdRequestBodyType;
+  }>("/:patientId", updatePatientByIdHandler);
+
+  // DELETE /api/patients/:patientId
+  fastify.delete<{ Params: GetPatientByIdRequestParamsType }>(
+    "/:patientId",
+    deletePatientByIdHandler
+  );
 }
 
 export default routes;
