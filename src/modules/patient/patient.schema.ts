@@ -1,13 +1,40 @@
-export interface IParams {
-  patientId: number;
-}
+import { z } from "zod";
 
-export interface ICreatePatient {
-  name: string;
-  email: string;
-}
+// REQUEST Schema
+// POST /api/patients
+export const CreatePatientRequestBodySchema = z.object({
+  name: z.string({
+    required_error: "Nome é Obrigatório",
+  }),
+  email: z.string().optional(),
+});
 
-export interface IUpdatePatient {
-  name?: string;
-  email?: string;
-}
+// REQUEST Schema
+// GET /api/patients/:patientId
+export const GetPatientByIdRequestParamsSchema = z.object({
+  patientId: z
+    .string({
+      required_error: "PatientId é Obrigatório",
+    })
+    .transform((val) => Number(val)),
+});
+
+// REQUEST Schema
+// PUT /api/patients/:patientId
+export const PutPatientByIdRequestBodySchema = z.object({
+  name: z.string().optional(),
+  email: z.string().optional(),
+});
+
+// TYPES
+export type CreatePatientRequestBodyType = z.infer<
+  typeof CreatePatientRequestBodySchema
+>;
+
+export type GetPatientByIdRequestParamsType = z.infer<
+  typeof GetPatientByIdRequestParamsSchema
+>;
+
+export type PutPatientByIdRequestBodyType = z.infer<
+  typeof PutPatientByIdRequestBodySchema
+>;
