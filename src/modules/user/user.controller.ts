@@ -6,6 +6,7 @@ import {
   UserLoginSchema,
   UserLoginType,
 } from "./user.schema";
+
 import { hashPassword, verifyPassword } from "../../utils/hash";
 import prisma from "../../utils/prisma";
 
@@ -68,6 +69,7 @@ export async function getUserByIdHandler(
     const user = await prisma.user.findFirst({
       where: { id: Number(request.user.id) },
     });
+
     if (!user) reply.code(500);
 
     const parsedReply = CreatePatientReplySchema.parse(user);
