@@ -54,6 +54,10 @@ export async function userLoginHandler(
     return reply.send({
       message: "Email ou Senha inválidos",
     });
+
+  reply.jwtSign({ id: user.id }, function (err, token) {
+    return reply.send(err || { token: token });
+  });
 }
 
 export async function getAllUsersHandler(
