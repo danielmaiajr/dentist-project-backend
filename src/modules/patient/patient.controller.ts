@@ -84,25 +84,3 @@ export async function updatePatientByIdHandler(
   } else if (!parsedBody.success) reply.send(parsedBody.error);
   else if (!parsedParams.success) reply.send(parsedParams.error);
 }
-
-export async function deletePatientByIdHandler(
-  request: FastifyRequest<{ Params: GetPatientByIdRequestParamsType }>,
-  reply: FastifyReply
-) {
-  const parsedParams = GetPatientByIdRequestParamsSchema.safeParse(
-    request.params
-  );
-
-  if (parsedParams.success) {
-    try {
-      const patient = await prisma.patient.delete({
-        where: { id: parsedParams.data.patientId },
-      });
-      reply.send(patient);
-    } catch (err) {
-      reply.send(err);
-    }
-  } else {
-    reply.send(parsedParams.error);
-  }
-}

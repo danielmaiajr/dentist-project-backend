@@ -1,7 +1,6 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
 import {
   createPatientHandler,
-  deletePatientByIdHandler,
   getAllPatientsHandler,
   getPatientByIdHandler,
   updatePatientByIdHandler,
@@ -39,12 +38,6 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
     "/:patientId",
     { onRequest: [fastify.authenticate] },
     updatePatientByIdHandler
-  );
-
-  // DELETE /api/patients/:patientId
-  fastify.delete<{ Params: GetPatientByIdRequestParamsType }>(
-    "/:patientId",
-    deletePatientByIdHandler
   );
 }
 
