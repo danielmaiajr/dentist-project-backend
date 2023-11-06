@@ -15,7 +15,7 @@ export const CreateUserRequestBodySchema = z.object({
 
 // REPLY Schema
 // POST /api/users
-export const CreatePatientReplySchema = z.object({
+export const CreateUserReplySchema = z.object({
   id: z.number(),
   email: z.string(),
   createdAt: z.date(),

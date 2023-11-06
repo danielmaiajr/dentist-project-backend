@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
-  CreatePatientReplySchema,
+  CreateUserReplySchema,
   CreateUserRequestBodySchema,
   CreateUserRequestBodyType,
   UserLoginSchema,
@@ -23,7 +23,7 @@ export async function createUserHandler(
       data: { email: parsedBody.data.email, password_hash: hash },
     });
 
-    const parsedReply = CreatePatientReplySchema.parse(user);
+    const parsedReply = CreateUserReplySchema.parse(user);
     reply.send(parsedReply);
   } catch (err) {
     console.log(err);
@@ -72,7 +72,7 @@ export async function getUserByIdHandler(
 
     if (!user) reply.code(500);
 
-    const parsedReply = CreatePatientReplySchema.parse(user);
+    const parsedReply = CreateUserReplySchema.parse(user);
     reply.send(parsedReply);
   } catch (err) {
     reply.send(err);
