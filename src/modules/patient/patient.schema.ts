@@ -6,7 +6,6 @@ export const CreatePatientRequestBodySchema = z.object({
   name: z.string({
     required_error: "Nome é Obrigatório",
   }),
-  email: z.string().optional(),
 });
 
 // REQUEST Schema
@@ -23,7 +22,6 @@ export const GetPatientByIdRequestParamsSchema = z.object({
 // PUT /api/patients/:patientId
 export const PutPatientByIdRequestBodySchema = z.object({
   name: z.string().optional(),
-  email: z.string().optional(),
 });
 
 // TYPES
