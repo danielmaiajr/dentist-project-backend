@@ -57,16 +57,3 @@ export async function updateDentistByIdHandler(
 
   reply.send(dentist);
 }
-
-export async function deleteDentistByIdHandler(
-  request: FastifyRequest<{ Params: IParams }>,
-  reply: FastifyReply
-) {
-  const { dentistId } = request.params;
-
-  const dentist = await prisma.dentist.delete({
-    where: { id: Number(dentistId) },
-  });
-
-  reply.send(dentist);
-}

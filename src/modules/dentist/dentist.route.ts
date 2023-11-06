@@ -1,7 +1,6 @@
 import { FastifyInstance, FastifyServerOptions } from "fastify";
 import {
   createDentistHandler,
-  deleteDentistByIdHandler,
   getAllDentistsHandler,
   getDentistByIdHandler,
   updateDentistByIdHandler,
@@ -17,7 +16,6 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
     "/:dentistId",
     updateDentistByIdHandler
   );
-  fastify.delete<{ Params: IParams }>("/:dentistId", deleteDentistByIdHandler);
 }
 
 export default routes;
