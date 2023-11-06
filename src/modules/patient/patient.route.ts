@@ -17,6 +17,7 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
   // POST /api/patients
   fastify.post<{ Body: CreatePatientRequestBodyType }>(
     "/",
+    { onRequest: [fastify.authenticate] },
     createPatientHandler
   );
 
@@ -26,6 +27,7 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
   // GET /api/patients/:patientId
   fastify.get<{ Params: GetPatientByIdRequestParamsType }>(
     "/:patientId",
+    { onRequest: [fastify.authenticate] },
     getPatientByIdHandler
   );
 
@@ -33,7 +35,11 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
   fastify.put<{
     Params: GetPatientByIdRequestParamsType;
     Body: PutPatientByIdRequestBodyType;
-  }>("/:patientId", updatePatientByIdHandler);
+  }>(
+    "/:patientId",
+    { onRequest: [fastify.authenticate] },
+    updatePatientByIdHandler
+  );
 
   // DELETE /api/patients/:patientId
   fastify.delete<{ Params: GetPatientByIdRequestParamsType }>(
