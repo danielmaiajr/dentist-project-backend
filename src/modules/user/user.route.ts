@@ -18,16 +18,21 @@ async function userRoute(fastify: FastifyInstance) {
   fastify.post<{ Body: UserLoginType }>("/login", userLoginHandler);
 
   // GET /api/users
-  fastify.get("/", getAllUsersHandler);
+  fastify.get("/", { onRequest: [fastify.authenticate] }, getUserByIdHandler);
 
-  // GET /api/users/:userId
-  fastify.get("/:userId", getUserByIdHandler);
+  // PUT /api/users
+  fastify.put(
+    "/",
+    { onRequest: [fastify.authenticate] },
+    updateUserByIdHandler
+  );
 
-  // PUT /api/users/:userId
-  fastify.put("/:userId", updateUserByIdHandler);
-
-  // DELETE /api/users/:userId
-  fastify.delete("/:userId", deleteUserByIdHandler);
+  // DELETE /api/users
+  fastify.delete(
+    "/",
+    { onRequest: [fastify.authenticate] },
+    deleteUserByIdHandler
+  );
 }
 
 export default userRoute;
