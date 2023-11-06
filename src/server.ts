@@ -44,7 +44,7 @@ const main = async () => {
   try {
     fastifyApp.listen({
       host: "0.0.0.0",
-      port: process.env.PORT ? Number(process.env.PORT) : 5000,
+      port: process.env.PORT ? Number(process.env.PORT) : 3333,
     });
     console.log("Server running...");
   } catch (err) {
