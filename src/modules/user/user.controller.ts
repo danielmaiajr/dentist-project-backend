@@ -60,18 +60,21 @@ export async function userLoginHandler(
   });
 }
 
-export async function getAllUsersHandler(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  reply.send("getAllUsersHandler");
-}
-
 export async function getUserByIdHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  reply.send("getUserByIdHandler");
+  try {
+    const user = await prisma.user.findFirst({
+      where: { id: Number(request.user.id) },
+    });
+    if (!user) reply.code(500);
+
+    const parsedReply = CreatePatientReplySchema.parse(user);
+    reply.send(parsedReply);
+  } catch (err) {
+    reply.send(err);
+  }
 }
 
 export async function updateUserByIdHandler(
