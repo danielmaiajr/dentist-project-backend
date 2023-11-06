@@ -47,18 +47,16 @@ export async function getPatientByIdHandler(
     request.params
   );
 
-  if (parsedParams.success) {
-    try {
-      const patient = await prisma.patient.findUnique({
-        where: { id: parsedParams.data.patientId },
-      });
+  if (!parsedParams.success) return reply.code(500).send(parsedParams.error);
 
-      reply.send(patient);
-    } catch (err) {
-      reply.send(err);
-    }
-  } else {
-    reply.code(500).send(parsedParams.error);
+  try {
+    const patient = await prisma.patient.findUnique({
+      where: { id: parsedParams.data.patientId },
+    });
+
+    reply.send(patient);
+  } catch (err) {
+    reply.send(err);
   }
 }
 
