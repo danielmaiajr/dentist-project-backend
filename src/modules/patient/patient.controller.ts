@@ -17,7 +17,10 @@ export async function createPatientHandler(
 
   if (parsedBody.success) {
     try {
-      const patient = await prisma.patient.create({ data: parsedBody.data });
+      const patient = await prisma.patient.create({
+        data: { ...parsedBody.data, userId: Number(request.user.id) },
+      });
+
       reply.send(patient);
     } catch (err) {
       reply.send(err);
