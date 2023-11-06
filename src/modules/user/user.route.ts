@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify";
 import {
   createUserHandler,
   userLoginHandler,
-  getAllUsersHandler,
   getUserByIdHandler,
   updateUserByIdHandler,
   deleteUserByIdHandler,
