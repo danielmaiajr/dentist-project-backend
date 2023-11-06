@@ -72,18 +72,19 @@ export async function updatePatientByIdHandler(
   const parsedParams = GetPatientByIdRequestParamsSchema.safeParse(
     request.params
   );
+  if (!parsedParams.success) return reply.send(parsedParams.error);
+
   const parsedBody = PutPatientByIdRequestBodySchema.safeParse(request.body);
-  console.log(parsedBody, parsedParams);
-  if (parsedBody.success && parsedParams.success) {
-    try {
-      const patient = await prisma.patient.update({
-        where: { id: parsedParams.data.patientId },
-        data: parsedBody.data,
-      });
-      reply.send(patient);
-    } catch (err) {
-      reply.send(err);
-    }
-  } else if (!parsedBody.success) reply.send(parsedBody.error);
-  else if (!parsedParams.success) reply.send(parsedParams.error);
+  if (!parsedBody.success) return reply.send(parsedBody.error);
+
+  try {
+    const patient = await prisma.patient.update({
+      where: { id: parsedParams.data.patientId },
+      data: parsedBody.data,
+    });
+
+    reply.send(patient);
+  } catch (err) {
+    reply.send(err);
+  }
 }
