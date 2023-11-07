@@ -21,19 +21,31 @@ model User {
 }
 
 model Patient {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  id           Int           @id @default(autoincrement())
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+  User         User          @relation(fields: [userId], references: [id])
+  userId       Int
 }
 
 model Dentist {
+  id          Int           @id @default(autoincrement())
+  name        String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  appointment Appointment[]
+  User        User          @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model Appointment {
   id        Int      @id @default(autoincrement())
-  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  Patient   Patient  @relation(fields: [patientId], references: [id])
+  patientId Int
+  Dentist   Dentist  @relation(fields: [dentistId], references: [id])
+  dentistId Int
 }
