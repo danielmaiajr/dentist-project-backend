@@ -3,6 +3,8 @@ import fastifyJwt from "@fastify/jwt";
 import patientRoute from "./modules/patient/patient.route";
 import dentistRoute from "./modules/dentist/dentist.route";
 import userRoute from "./modules/user/user.route";
+import appointmentRoute from "./modules/appointment/appointment.route";
+
 import { FastifyRequest } from "fastify/types/request";
 import { FastifyReply } from "fastify/types/reply";
 
@@ -39,6 +41,7 @@ fastifyApp.decorate(
 fastifyApp.register(patientRoute, { prefix: "/api/patients" });
 fastifyApp.register(dentistRoute, { prefix: "/api/dentists" });
 fastifyApp.register(userRoute, { prefix: "/api/users" });
+fastifyApp.register(appointmentRoute, { prefix: "/api/appointments" });
 
 const main = async () => {
   try {
