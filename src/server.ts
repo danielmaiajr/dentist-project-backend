@@ -11,8 +11,8 @@ const fastifyApp = fastify();
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { id: number };
-    user: { id: number; name: string };
+    payload: { id: number; clinicId: number };
+    user: { id: number; clinicId: number };
   }
 }
 
