@@ -10,11 +10,15 @@ import {
 import { CreateUserRequestBodyType, UserLoginType } from "./user.schema";
 
 async function userRoute(fastify: FastifyInstance) {
-  // POST /api/users
-  fastify.post<{ Body: CreateUserRequestBodyType }>("/", createUserHandler);
-
   // POST /api/users/login
   fastify.post<{ Body: UserLoginType }>("/login", userLoginHandler);
+
+  // POST /api/users
+  fastify.post<{ Body: CreateUserRequestBodyType }>(
+    "/",
+    { onRequest: [fastify.authenticate] },
+    createUserHandler
+  );
 
   // GET /api/users
   fastify.get("/", { onRequest: [fastify.authenticate] }, getUserByIdHandler);

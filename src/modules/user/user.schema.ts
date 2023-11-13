@@ -11,6 +11,9 @@ export const CreateUserRequestBodySchema = z.object({
   password: z.string({
     required_error: "Senha é Obrigatória",
   }),
+  clinicId: z.number({
+    required_error: "ClinicId é Obrigatório",
+  }),
 });
 
 // REPLY Schema
@@ -18,6 +21,8 @@ export const CreateUserRequestBodySchema = z.object({
 export const CreateUserReplySchema = z.object({
   id: z.number(),
   email: z.string(),
+  role: z.string(),
+  clinicId: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

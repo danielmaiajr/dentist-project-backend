@@ -20,7 +20,12 @@ export async function createUserHandler(
   try {
     const hash = await hashPassword(parsedBody.data.password);
     const user = await prisma.user.create({
-      data: { email: parsedBody.data.email, password_hash: hash },
+      data: {
+        email: parsedBody.data.email,
+        password_hash: hash,
+        role: "dentist",
+        clinicId: parsedBody.data.clinicId,
+      },
     });
 
     const parsedReply = CreateUserReplySchema.parse(user);
