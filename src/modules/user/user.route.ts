@@ -5,6 +5,7 @@ import {
   getUserByIdHandler,
   updateUserByIdHandler,
   deleteUserByIdHandler,
+  getAllUsersHandler,
 } from "./user.controller";
 
 import { CreateUserRequestBodyType, UserLoginType } from "./user.schema";
@@ -22,6 +23,13 @@ async function userRoute(fastify: FastifyInstance) {
 
   // GET /api/users
   fastify.get("/", { onRequest: [fastify.authenticate] }, getUserByIdHandler);
+
+  // GET /api/users/all
+  fastify.get(
+    "/all",
+    { onRequest: [fastify.authenticate] },
+    getAllUsersHandler
+  );
 
   // PUT /api/users
   fastify.put(
