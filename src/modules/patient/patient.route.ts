@@ -21,7 +21,11 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
   );
 
   // GET /api/patients
-  fastify.get("/", getAllPatientsHandler);
+  fastify.get(
+    "/",
+    { onRequest: [fastify.authenticate] },
+    getAllPatientsHandler
+  );
 
   // GET /api/patients/:patientId
   fastify.get<{ Params: GetPatientByIdRequestParamsType }>(
