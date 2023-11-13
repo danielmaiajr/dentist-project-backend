@@ -3,6 +3,7 @@ import {
   CreateUserReplySchema,
   CreateUserRequestBodySchema,
   CreateUserRequestBodyType,
+  GetAllUserReplySchema,
   UserLoginSchema,
   UserLoginType,
 } from "./user.schema";
@@ -24,7 +25,7 @@ export async function createUserHandler(
         email: parsedBody.data.email,
         password_hash: hash,
         role: "dentist",
-        clinicId: parsedBody.data.clinicId,
+        clinicId: request.user.clinicId,
       },
     });
 
@@ -61,9 +62,12 @@ export async function userLoginHandler(
       message: "Email ou Senha inválidos",
     });
 
-  reply.jwtSign({ id: user.id }, function (err, token) {
-    return reply.send(err || { token: token });
-  });
+  reply.jwtSign(
+    { id: user.id, clinicId: user.clinicId },
+    function (err, token) {
+      return reply.send(err || { token: token });
+    }
+  );
 }
 
 export async function getUserByIdHandler(
@@ -78,6 +82,23 @@ export async function getUserByIdHandler(
     if (!user) reply.code(500);
 
     const parsedReply = CreateUserReplySchema.parse(user);
+    reply.send(parsedReply);
+  } catch (err) {
+    reply.send(err);
+  }
+}
+
+export async function getAllUsersHandler(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const user = await prisma.user.findMany({
+      where: { clinicId: Number(request.user.clinicId) },
+    });
+
+    if (!user) reply.code(500);
+    const parsedReply = GetAllUserReplySchema.parse(user);
     reply.send(parsedReply);
   } catch (err) {
     reply.send(err);
