@@ -1,7 +1,10 @@
 import fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
-import patientRoute from "./modules/patient/patient.route";
+
+import clinicRoute from "./modules/clinic/clinic.route";
 import userRoute from "./modules/user/user.route";
+import patientRoute from "./modules/patient/patient.route";
+import insuranceRoute from "./modules/insurance/insurance.route";
 import appointmentRoute from "./modules/appointment/appointment.route";
 
 import { FastifyRequest } from "fastify/types/request";
@@ -37,8 +40,10 @@ fastifyApp.decorate(
   }
 );
 
-fastifyApp.register(patientRoute, { prefix: "/api/patients" });
+fastifyApp.register(clinicRoute, { prefix: "/api/clinics" });
 fastifyApp.register(userRoute, { prefix: "/api/users" });
+fastifyApp.register(patientRoute, { prefix: "/api/patients" });
+fastifyApp.register(insuranceRoute, { prefix: "/api/insurances" });
 fastifyApp.register(appointmentRoute, { prefix: "/api/appointments" });
 
 const main = async () => {
