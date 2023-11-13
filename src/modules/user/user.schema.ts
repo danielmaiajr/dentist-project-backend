@@ -11,9 +11,6 @@ export const CreateUserRequestBodySchema = z.object({
   password: z.string({
     required_error: "Senha é Obrigatória",
   }),
-  clinicId: z.number({
-    required_error: "ClinicId é Obrigatório",
-  }),
 });
 
 // REPLY Schema
@@ -39,6 +36,10 @@ export const UserLoginSchema = z.object({
     required_error: "Senha é Obrigatória",
   }),
 });
+
+// REPLY Schema
+// GET /api/users/all
+export const GetAllUserReplySchema = z.array(CreateUserReplySchema);
 
 // TYPES
 export type CreateUserRequestBodyType = z.infer<
