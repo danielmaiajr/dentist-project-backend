@@ -11,7 +11,7 @@ import {
 
 async function clinicRoute(fastify: FastifyInstance) {
   // POST /api/clinics
-  fastify.post("/", { onRequest: [fastify.authenticate] }, createClinicHandler);
+  fastify.post("/", createClinicHandler);
 
   // GET /api/clinics
   fastify.get("/", { onRequest: [fastify.authenticate] }, getClinicByIdHandler);
