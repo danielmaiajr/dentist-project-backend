@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+
 import {
   CreateAppointmentRequestBodySchema,
   CreateAppointmentRequestBodyType,
@@ -7,6 +8,7 @@ import {
   PutAppointmentByIdRequestBodySchema,
   PutAppointmentByIdRequestBodyType,
 } from "./appointment.schema";
+
 import prisma from "../../utils/prisma";
 
 // ROUTE POST /api/appointments
@@ -19,12 +21,16 @@ export async function createAppointmentHandler(
 
   try {
     const appointment = await prisma.appointment.create({
-      data: { ...parsedBody.data },
+      data: {
+        ...parsedBody.data,
+        status: "Avaliação",
+        clinicId: request.user.clinicId,
+      },
     });
 
     reply.send(appointment);
   } catch (err) {
-    reply.send(err);
+    return reply.code(500).send({ errorMessage: "database Error", err });
   }
 }
 
