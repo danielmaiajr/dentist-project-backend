@@ -7,6 +7,8 @@ import {
   GetAppointmentByIdRequestParamsType,
   PutAppointmentByIdRequestBodySchema,
   PutAppointmentByIdRequestBodyType,
+  PutAppointmentByIdRequestParamsSchema,
+  PutAppointmentByIdRequestParamsType,
 } from "./appointment.schema";
 
 import prisma from "../../utils/prisma";
@@ -72,12 +74,12 @@ export async function getAppointmentByIdHandler(
 
 export async function updateAppointmentByIdHandler(
   request: FastifyRequest<{
-    Params: GetAppointmentByIdRequestParamsType;
+    Params: PutAppointmentByIdRequestParamsType;
     Body: PutAppointmentByIdRequestBodyType;
   }>,
   reply: FastifyReply
 ) {
-  const parsedParams = GetAppointmentByIdRequestParamsSchema.safeParse(
+  const parsedParams = PutAppointmentByIdRequestParamsSchema.safeParse(
     request.params
   );
   if (!parsedParams.success) return reply.send(parsedParams.error);
@@ -87,7 +89,6 @@ export async function updateAppointmentByIdHandler(
   );
   if (!parsedBody.success) return reply.send(parsedBody.error);
 
-  console.log(parsedBody.data);
   try {
     const appointment = await prisma.appointment.update({
       where: { id: parsedParams.data.appointmentId },
@@ -96,6 +97,6 @@ export async function updateAppointmentByIdHandler(
 
     reply.send(appointment);
   } catch (err) {
-    reply.send(err);
+    return reply.code(500).send({ errorMessage: "database Error", err });
   }
 }

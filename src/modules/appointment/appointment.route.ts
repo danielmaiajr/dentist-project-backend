@@ -3,6 +3,7 @@ import {
   CreateAppointmentRequestBodyType,
   GetAppointmentByIdRequestParamsType,
   PutAppointmentByIdRequestBodyType,
+  PutAppointmentByIdRequestParamsType,
 } from "./appointment.schema";
 import {
   createAppointmentHandler,
@@ -35,7 +36,7 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
 
   // PUT /api/appointments/:appointmentId
   fastify.put<{
-    Params: GetAppointmentByIdRequestParamsType;
+    Params: PutAppointmentByIdRequestParamsType;
     Body: PutAppointmentByIdRequestBodyType;
   }>(
     "/:appointmentId",
