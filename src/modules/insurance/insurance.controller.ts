@@ -32,6 +32,24 @@ export async function createInsuranceHandler(
   }
 }
 
+// GET /api/insurances
+export async function getAllInsuracesHandler(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const insurances = await prisma.insurance.findMany({
+      where: {
+        clinicId: request.user.clinicId,
+      },
+    });
+
+    return reply.send(insurances);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
+}
+
 // GET /api/insurances/:insuranceId
 export async function getInsuranceByIdHandler(
   request: FastifyRequest<{ Params: GetInsuranceByIdRequestParamsType }>,

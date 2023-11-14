@@ -3,6 +3,7 @@ import { FastifyInstance } from "fastify";
 // Import Handlers
 import {
   createInsuranceHandler,
+  getAllInsuracesHandler,
   getInsuranceByIdHandler,
   putInsuranceByIdHandler,
 } from "./insurance.controller";
@@ -19,12 +20,19 @@ async function insuranceRoute(fastify: FastifyInstance) {
 
   // GET /api/insurances
   fastify.get(
+    "/",
+    { onRequest: [fastify.authenticate] },
+    getAllInsuracesHandler
+  );
+
+  // GET /api/insurances/:insuranceId
+  fastify.get(
     "/:insuranceId",
     { onRequest: [fastify.authenticate] },
     getInsuranceByIdHandler
   );
 
-  // PUT /api/insurances
+  // PUT /api/insurances/:insuranceId
   fastify.put(
     "/:insuranceId",
     { onRequest: [fastify.authenticate] },
