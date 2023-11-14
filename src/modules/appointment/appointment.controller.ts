@@ -40,10 +40,12 @@ export async function getAllAppointmentsHandler(
   reply: FastifyReply
 ) {
   try {
-    const appointment = await prisma.appointment.findMany();
+    const appointment = await prisma.appointment.findMany({
+      where: { clinicId: request.user.clinicId },
+    });
     reply.send(appointment);
   } catch (err) {
-    reply.send(err);
+    return reply.code(500).send({ errorMessage: "database Error", err });
   }
 }
 
