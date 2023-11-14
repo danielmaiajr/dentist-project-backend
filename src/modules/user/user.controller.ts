@@ -111,10 +111,3 @@ export async function updateUserByIdHandler(
 ) {
   reply.send("updateUserByIdHandler");
 }
-
-export async function deleteUserByIdHandler(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  reply.send("deleteUserByIdHandler");
-}

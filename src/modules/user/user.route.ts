@@ -4,7 +4,6 @@ import {
   userLoginHandler,
   getUserByIdHandler,
   updateUserByIdHandler,
-  deleteUserByIdHandler,
   getAllUsersHandler,
 } from "./user.controller";
 
@@ -36,13 +35,6 @@ async function userRoute(fastify: FastifyInstance) {
     "/",
     { onRequest: [fastify.authenticate] },
     updateUserByIdHandler
-  );
-
-  // DELETE /api/users
-  fastify.delete(
-    "/",
-    { onRequest: [fastify.authenticate] },
-    deleteUserByIdHandler
   );
 }
 
