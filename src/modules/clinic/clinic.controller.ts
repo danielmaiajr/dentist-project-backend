@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import {
   CreateClinicRequestType,
   CreateClinicResquestBodySchema,
+  PutClinicRequestBodySchema,
+  PutClinicRequestBodyType,
 } from "./clinic.schema";
 import { hashPassword } from "../../utils/hash";
 import prisma from "../../utils/prisma";
@@ -57,8 +59,23 @@ export async function getClinicByIdHandler(
 
 // PUT /api/clinics/
 export async function putClinicByIdHandler(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Body: PutClinicRequestBodyType }>,
   reply: FastifyReply
 ) {
-  return reply.send("putClinicByIdHandler");
+  const parsedBody = PutClinicRequestBodySchema.safeParse(request.body);
+  if (!parsedBody.success) return reply.send(parsedBody.error);
+
+  try {
+    const clinic = await prisma.clinic.update({
+      where: { id: request.user.clinicId },
+      data: parsedBody.data,
+    });
+
+    if (!clinic)
+      return reply.code(404).send({ errorMessage: "clinicId not found" });
+
+    return reply.send(clinic);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
