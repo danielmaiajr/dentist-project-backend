@@ -1,5 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateInsuranceRequestBodySchema } from "./insurance.schema";
+import {
+  CreateInsuranceRequestBodySchema,
+  GetInsuranceByIdRequestParamsSchema,
+  GetInsuranceByIdRequestParamsType,
+} from "./insurance.schema";
 import prisma from "../../utils/prisma";
 
 // POST /api/insurances
@@ -26,10 +30,23 @@ export async function createInsuranceHandler(
 
 // GET /api/insurances
 export async function getInsuranceByIdHandler(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Params: GetInsuranceByIdRequestParamsType }>,
   reply: FastifyReply
 ) {
-  return reply.send("getInsuranceByIdHandler");
+  const parsedParams = GetInsuranceByIdRequestParamsSchema.safeParse(
+    request.params
+  );
+  if (!parsedParams.success) return reply.code(500).send(parsedParams.error);
+
+  try {
+    const insurance = await prisma.insurance.findFirst({
+      where: { id: parsedParams.data.insuranceId },
+    });
+
+    return reply.send(insurance);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
 
 // PUT /api/insurances

@@ -8,7 +8,15 @@ export const CreateInsuranceRequestBodySchema = z.object({
   }),
 });
 
-// GET /api/insuranses
+// GET /api/insuranses/:insuranceId
+export const GetInsuranceByIdRequestParamsSchema = z.object({
+  insuranceId: z
+    .string({
+      required_error: "insuranceId é Obrigatório",
+    })
+    .transform((val) => Number(val)),
+});
+
 // PUT /api/insuranses
 export const PutInsuranceRequestBodySchema = z.object({
   name: z.string().optional(),
@@ -22,6 +30,10 @@ export const PutInsuranceRequestBodySchema = z.object({
 // TYPES
 export type CreateInsuranceRequestBodyType = z.infer<
   typeof CreateInsuranceRequestBodySchema
+>;
+
+export type GetInsuranceByIdRequestParamsType = z.infer<
+  typeof GetInsuranceByIdRequestParamsSchema
 >;
 
 export type PutInsuranceRequestBodyType = z.infer<

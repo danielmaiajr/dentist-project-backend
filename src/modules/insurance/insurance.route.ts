@@ -19,7 +19,7 @@ async function insuranceRoute(fastify: FastifyInstance) {
 
   // GET /api/insurances
   fastify.get(
-    "/",
+    "/:insuranceId",
     { onRequest: [fastify.authenticate] },
     getInsuranceByIdHandler
   );
