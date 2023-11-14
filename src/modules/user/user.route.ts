@@ -7,18 +7,22 @@ import {
   getAllUsersHandler,
 } from "./user.controller";
 
-import { CreateUserRequestBodyType, UserLoginType } from "./user.schema";
+import {
+  CreateUserRequestBodyType,
+  PutUserByIdBodyRequestType,
+  UserLoginType,
+} from "./user.schema";
 
 async function userRoute(fastify: FastifyInstance) {
-  // POST /api/users/login
-  fastify.post<{ Body: UserLoginType }>("/login", userLoginHandler);
-
   // POST /api/users
   fastify.post<{ Body: CreateUserRequestBodyType }>(
     "/",
     { onRequest: [fastify.authenticate] },
     createUserHandler
   );
+
+  // POST /api/users/login
+  fastify.post<{ Body: UserLoginType }>("/login", userLoginHandler);
 
   // GET /api/users
   fastify.get("/", { onRequest: [fastify.authenticate] }, getUserByIdHandler);
@@ -31,7 +35,7 @@ async function userRoute(fastify: FastifyInstance) {
   );
 
   // PUT /api/users
-  fastify.put(
+  fastify.put<{ Body: PutUserByIdBodyRequestType }>(
     "/",
     { onRequest: [fastify.authenticate] },
     updateUserByIdHandler
