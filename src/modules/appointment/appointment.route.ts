@@ -19,18 +19,18 @@ async function routes(fastify: FastifyInstance, options: FastifyServerOptions) {
     createAppointmentHandler
   );
 
-  // GET /api/appointmenst/:appointmentId
-  fastify.get<{ Params: GetAppointmentByIdRequestParamsType }>(
-    "/:appointmentId",
-    { onRequest: [fastify.authenticate] },
-    getAppointmentByIdHandler
-  );
-
   // GET /api/appointments
   fastify.get(
     "/",
     { onRequest: [fastify.authenticate] },
     getAllAppointmentsHandler
+  );
+
+  // GET /api/appointmenst/:appointmentId
+  fastify.get<{ Params: GetAppointmentByIdRequestParamsType }>(
+    "/:appointmentId",
+    { onRequest: [fastify.authenticate] },
+    getAppointmentByIdHandler
   );
 
   // PUT /api/appointments/:appointmentId
