@@ -66,7 +66,7 @@ export async function getAppointmentByIdHandler(
 
     reply.send(appointment);
   } catch (err) {
-    reply.send(err);
+    return reply.code(500).send({ errorMessage: "database Error", err });
   }
 }
 
