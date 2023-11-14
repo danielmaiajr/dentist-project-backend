@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../../utils/prisma";
+
 import {
   CreatePatientRequestBodySchema,
   GetPatientByIdRequestParamsSchema,
@@ -18,7 +19,11 @@ export async function createPatientHandler(
   if (parsedBody.success) {
     try {
       const patient = await prisma.patient.create({
-        data: { ...parsedBody.data, userId: Number(request.user.id) },
+        data: {
+          ...parsedBody.data,
+          userId: Number(request.user.id),
+          clinicId: Number(request.user.clinicId),
+        },
       });
 
       reply.send(patient);
@@ -34,9 +39,14 @@ export async function getAllPatientsHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const patient = await prisma.patient.findMany();
-
-  reply.send(patient);
+  try {
+    const patient = await prisma.patient.findMany({
+      where: { clinicId: request.user.clinicId },
+    });
+    reply.send(patient);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
 
 export async function getPatientByIdHandler(
