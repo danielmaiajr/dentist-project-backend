@@ -26,7 +26,7 @@ async function insuranceRoute(fastify: FastifyInstance) {
 
   // PUT /api/insurances
   fastify.put(
-    "/",
+    "/:insuranceId",
     { onRequest: [fastify.authenticate] },
     putInsuranceByIdHandler
   );

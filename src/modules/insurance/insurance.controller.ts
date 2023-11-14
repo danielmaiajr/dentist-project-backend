@@ -3,6 +3,10 @@ import {
   CreateInsuranceRequestBodySchema,
   GetInsuranceByIdRequestParamsSchema,
   GetInsuranceByIdRequestParamsType,
+  PutInsuranceByIdRequestParamsSchema,
+  PutInsuranceByIdRequestParamsType,
+  PutInsuranceRequestBodySchema,
+  PutInsuranceRequestBodyType,
 } from "./insurance.schema";
 import prisma from "../../utils/prisma";
 
@@ -28,7 +32,7 @@ export async function createInsuranceHandler(
   }
 }
 
-// GET /api/insurances
+// GET /api/insurances/:insuranceId
 export async function getInsuranceByIdHandler(
   request: FastifyRequest<{ Params: GetInsuranceByIdRequestParamsType }>,
   reply: FastifyReply
@@ -49,10 +53,30 @@ export async function getInsuranceByIdHandler(
   }
 }
 
-// PUT /api/insurances
+// PUT /api/insurances/:insuranceId
 export async function putInsuranceByIdHandler(
-  request: FastifyRequest,
+  request: FastifyRequest<{
+    Params: PutInsuranceByIdRequestParamsType;
+    Body: PutInsuranceRequestBodyType;
+  }>,
   reply: FastifyReply
 ) {
-  return reply.send("putInsuranceByIdHandler");
+  const parsedParams = PutInsuranceByIdRequestParamsSchema.safeParse(
+    request.params
+  );
+  if (!parsedParams.success) return reply.code(500).send(parsedParams.error);
+
+  const parsedBody = PutInsuranceRequestBodySchema.safeParse(request.body);
+  if (!parsedBody.success) return reply.code(500).send(parsedBody.error);
+
+  try {
+    const insurance = await prisma.insurance.update({
+      where: { id: parsedParams.data.insuranceId },
+      data: parsedBody.data,
+    });
+
+    return reply.send(insurance);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
