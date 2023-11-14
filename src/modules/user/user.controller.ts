@@ -4,6 +4,9 @@ import {
   CreateUserRequestBodySchema,
   CreateUserRequestBodyType,
   GetAllUserReplySchema,
+  GetUserReplySchema,
+  PutUserByIdBodyRequestSchema,
+  PutUserByIdBodyRequestType,
   UserLoginSchema,
   UserLoginType,
 } from "./user.schema";
@@ -80,8 +83,7 @@ export async function getUserByIdHandler(
     });
 
     if (!user) reply.code(500);
-
-    const parsedReply = CreateUserReplySchema.parse(user);
+    const parsedReply = GetUserReplySchema.parse(user);
     reply.send(parsedReply);
   } catch (err) {
     reply.send(err);
@@ -106,8 +108,20 @@ export async function getAllUsersHandler(
 }
 
 export async function updateUserByIdHandler(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Body: PutUserByIdBodyRequestType }>,
   reply: FastifyReply
 ) {
-  reply.send("updateUserByIdHandler");
+  const parsedBody = PutUserByIdBodyRequestSchema.safeParse(request.body);
+  if (!parsedBody.success) return reply.code(500).send(parsedBody.error);
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: request.user.id },
+      data: parsedBody.data,
+    });
+
+    return reply.send(user);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
