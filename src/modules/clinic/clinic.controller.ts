@@ -41,7 +41,18 @@ export async function getClinicByIdHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  return reply.send("getClinicByIdHandler");
+  try {
+    const clinic = await prisma.clinic.findFirst({
+      where: { id: Number(request.user.clinicId) },
+    });
+
+    if (!clinic)
+      return reply.code(404).send({ errorMessage: "clinicId not found" });
+
+    return reply.send(clinic);
+  } catch (err) {
+    return reply.code(500).send({ errorMessage: "database Error", err });
+  }
 }
 
 // PUT /api/clinics/
