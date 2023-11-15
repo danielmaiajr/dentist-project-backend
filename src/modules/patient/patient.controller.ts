@@ -21,7 +21,6 @@ export async function createPatientHandler(
       const patient = await prisma.patient.create({
         data: {
           ...parsedBody.data,
-          userId: Number(request.user.id),
           clinicId: Number(request.user.clinicId),
         },
       });

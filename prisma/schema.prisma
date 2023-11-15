@@ -42,7 +42,6 @@ model User {
   name          String?
   role          String
 
-  patients    Patient[]
   appointment Appointment[]
 
   Clinic   Clinic @relation(fields: [clinicId], references: [id])
@@ -60,8 +59,6 @@ model Patient {
 
   appointments Appointment[]
 
-  User     User   @relation(fields: [userId], references: [id])
-  userId   Int
   Clinic   Clinic @relation(fields: [clinicId], references: [id])
   clinicId Int
 
