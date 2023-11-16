@@ -45,6 +45,7 @@ export const CreateUserReplySchema = z.object({
 export const GetUserReplySchema = z.object({
   id: z.number(),
   email: z.string(),
+  name: z.string().optional(),
   role: z.string(),
   clinicId: z.number(),
   createdAt: z.date(),
